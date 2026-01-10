@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Clone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #1c1e21;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: #fff;
+            padding: 10px 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1877f2;
+        }
+
+        .search-box {
+            background-color: #f0f2f5;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            width: 200px;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-icon {
+            width: 36px;
+            height: 36px;
+            background-color: #f0f2f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-icon:hover {
+            background-color: #e4e6eb;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .profile-pic {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 70px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-item:hover {
+            background-color: #f0f2f5;
+        }
+
+        .sidebar-item-icon {
+            font-size: 24px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-item-text {
+            font-weight: 500;
+            color: #1c1e21;
+        }
+
+        /* Main Feed */
+        .feed {
+            background-color: transparent;
+        }
+
+        /* Post Creator */
+        .post-creator {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-creator-header {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .post-creator-input {
+            flex: 1;
+            background-color: #f0f2f5;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 16px;
+            cursor: pointer;
+            color: #65676b;
+        }
+
+        .post-creator-input:hover {
+            background-color: #e4e6eb;
+        }
+
+        .post-creator-actions {
+            display: flex;
+            justify-content: space-around;
+            padding-top: 10px;
+            border-top: 1px solid #f0f2f5;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #65676b;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .action-btn:hover {
+            background-color: #f0f2f5;
+        }
+
+        /* Post */
+        .post {
+            background-color: #fff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 15px;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .post-author {
+            display: flex;
+            gap: 10px;
+        }
+
+        .post-author-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .post-author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-author-name {
+            font-weight: 600;
+            color: #1c1e21;
+        }
+
+        .post-author-time {
+            font-size: 13px;
+            color: #65676b;
+        }
+
+        .post-options {
+            cursor: pointer;
+            color: #65676b;
+            font-size: 18px;
+        }
+
+        .post-content {
+            padding: 15px;
+        }
+
+        .post-text {
+            color: #1c1e21;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            font-size: 13px;
+            color: #65676b;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        .post-action {
+            flex: 1;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            color: #65676b;
+            font-weight: 500;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            border: none;
+            background-color: transparent;
+        }
+
+        .post-action:hover {
+            background-color: #f0f2f5;
+        }
+
+        .post-action.liked {
+            color: #1877f2;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            padding: 15px;
+            background-color: #f8f9fa;
+        }
+
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .comment-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .comment-body {
+            flex: 1;
+        }
+
+        .comment-bubble {
+            background-color: #e4e6eb;
+            padding: 10px 12px;
+            border-radius: 18px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .comment-text {
+            font-size: 14px;
+            color: #1c1e21;
+        }
+
+        .comment-meta {
+            font-size: 12px;
+            color: #65676b;
+            margin-top: 5px;
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            background-color: transparent;
+        }
+
+        .widget {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .widget-title {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1c1e21;
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .friend-item:last-child {
+            border-bottom: none;
+        }
+
+        .friend-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .friend-name {
+            flex: 1;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .friend-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #31a24c;
+            border: 2px solid white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #f0f2f5;
+            padding-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #65676b;
+        }
+
+        .modal-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #1877f2;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #165de3;
+        }
+
+        .btn-secondary {
+            background-color: #f0f2f5;
+            color: #1c1e21;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e4e6eb;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar,
+            .right-sidebar {
+                display: none;
+            }
+
+            .search-box {
+                width: auto;
+            }
+        }
+
+        /* Notification Badge */
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #f02849;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .nav-icon-wrapper {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <div class="logo">f</div>
+            <input type="text" class="search-box" placeholder="🔍 Search Facebook">
+        </div>
+        <div class="navbar-right">
+            <div class="nav-icon-wrapper">
+                <div class="nav-icon">🏠</div>
+            </div>
+            <div class="nav-icon-wrapper">
+                <div class="nav-icon">👥</div>
+            </div>
+            <div class="nav-icon-wrapper">
+                <div class="nav-icon">📹</div>
+            </div>
+            <div class="nav-icon-wrapper">
+                <div class="nav-icon">🎮</div>
+            </div>
+            <div class="nav-icon-wrapper">
+                <div class="nav-icon">🔔</div>
+                <span class="badge">3</span>
+            </div>
+            <div class="nav-icon-wrapper">
+                <div class="nav-icon">💬</div>
+                <span class="badge">5</span>
+            </div>
+            <div class="user-profile">
+                <div class="profile-pic">FH</div>
+                <div style="font-weight: 500;">You</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-item">
+                <div class="sidebar-item-icon">🔵</div>
+                <div class="sidebar-item-text">Your Page</div>
+            </div>
+            <div class="sidebar-item">
+                <div class="sidebar-item-icon">👥</div>
+                <div class="sidebar-item-text">Friends</div>
+            </div>
+            <div class="sidebar-item">
+                <div class="sidebar-item-icon">🎵</div>
+                <div class="sidebar-item-text">Video</div>
+            </div>
+            <div class="sidebar-item">
+                <div class="sidebar-item-icon">📸</div>
+                <div class="sidebar-item-text">Photos</div>
+            </div>
+            <div class="sidebar-item">
+                <div class="sidebar-item-icon">⏱️</div>
+                <div class="sidebar-item-text">Memories</div>
+            </div>
+            <div class="sidebar-item">
+                <div class="sidebar-item-icon">📅</div>
+                <div class="sidebar-item-text">Events</div>
+            </div>
+            <div class="sidebar-item">
+                <div class="sidebar-item-icon">⭐</div>
+                <div class="sidebar-item-text">Saved</div>
+            </div>
+            <div class="sidebar-item">
+                <div class="sidebar-item-icon">👁️</div>
+                <div class="sidebar-item-text">Watch</div>
+            </div>
+        </aside>
+
+        <!-- Main Feed -->
+        <main class="feed">
+            <!-- Post Creator -->
+            <div class="post-creator">
+                <div class="post-creator-header">
+                    <div class="profile-pic" style="width: 40px; height: 40px; font-size: 18px;">FH</div>
+                    <input type="text" class="post-creator-input" placeholder="What's on your mind?" id="postInput" onclick="openPostModal()">
+                </div>
+                <div class="post-creator-actions">
+                    <button class="action-btn">
+                        <span style="font-size: 18px;">📸</span>
+                        <span>Photo/Video</span>
+                    </button>
+                    <button class="action-btn">
+                        <span style="font-size: 18px;">😊</span>
+                        <span>Feeling/Activity</span>
+                    </button>
+                    <button class="action-btn">
+                        <span style="font-size: 18px;">📍</span>
+                        <span>Check In</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Posts Feed -->
+            <div id="postsFeed"></div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <!-- Birthdays Widget -->
+            <div class="widget">
+                <div class="widget-title">🎂 Birthdays</div>
+                <div class="friend-item">
+                    <div class="friend-pic">JD</div>
+                    <div class="friend-name">John Doe</div>
+                </div>
+                <div class="friend-item">
+                    <div class="friend-pic">SM</div>
+                    <div class="friend-name">Sarah Miller</div>
+                </div>
+            </div>
+
+            <!-- Online Friends Widget -->
+            <div class="widget">
+                <div class="widget-title">👥 Online Friends</div>
+                <div class="friend-item">
+                    <div class="friend-pic">AB</div>
+                    <div class="friend-name">Alex Brown</div>
+                    <div class="friend-status"></div>
+                </div>
+                <div class="friend-item">
+                    <div class="friend-pic">EJ</div>
+                    <div class="friend-name">Emma Johnson</div>
+                    <div class="friend-status"></div>
+                </div>
+                <div class="friend-item">
+                    <div class="friend-pic">MC</div>
+                    <div class="friend-name">Mike Chen</div>
+                    <div class="friend-status"></div>
+                </div>
+                <div class="friend-item">
+                    <div class="friend-pic">LP</div>
+                    <div class="friend-name">Lisa Parker</div>
+                    <div class="friend-status"></div>
+                </div>
+            </div>
+
+            <!-- Suggested Friends Widget -->
+            <div class="widget">
+                <div class="widget-title">👤 Suggested For You</div>
+                <div class="friend-item">
+                    <div class="friend-pic">RW</div>
+                    <div class="friend-name">Ryan Wilson</div>
+                </div>
+                <div class="friend-item">
+                    <div class="friend-pic">OT</div>
+                    <div class="friend-name">Olivia Taylor</div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Post Creation Modal -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Post</h2>
+                <button class="close-btn" onclick="closePostModal()">&times;</button>
+            </div>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <div class="profile-pic" style="width: 40px; height: 40px; font-size: 18px;">FH</div>
+                <div>
+                    <div style="font-weight: 600;">You</div>
+                    <select style="padding: 4px 8px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #f0f2f5;">
+                        <option>Public</option>
+                        <option>Friends</option>
+                        <option>Private</option>
+                    </select>
+                </div>
+            </div>
+            <textarea id="postContent" class="modal-textarea" placeholder="What's on your mind?"></textarea>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closePostModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="createPost()">Post</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample posts data
+        const samplePosts = [
+            {
+                id: 1,
+                author: "John Doe",
+                initials: "JD",
+                time: "2 hours ago",
+                content: "Just finished an amazing hiking trip! The views were absolutely breathtaking. 🏔️",
+                likes: 234,
+                comments: 18,
+                shares: 5,
+                liked: false
+            },
+            {
+                id: 2,
+                author: "Sarah Miller",
+                initials: "SM",
+                time: "4 hours ago",
+                content: "Excited to announce that I've been promoted to Senior Developer! 🎉 Thanks to my amazing team and all the support!",
+                likes: 567,
+                comments: 42,
+                shares: 12,
+                liked: false
+            },
+            {
+                id: 3,
+                author: "Alex Brown",
+                initials: "AB",
+                time: "6 hours ago",
+                content: "Coffee and code - the perfect combination for a productive Friday! ☕💻",
+                likes: 123,
+                comments: 8,
+                shares: 2,
+                liked: false
+            }
+        ];
+
+        // Create post element
+        function createPostElement(post) {
+            return `
+                <div class="post" data-post-id="${post.id}">
+                    <div class="post-header">
+                        <div class="post-author">
+                            <div class="post-author-pic">${post.initials}</div>
+                            <div class="post-author-info">
+                                <div class="post-author-name">${post.author}</div>
+                                <div class="post-author-time">${post.time}</div>
+                            </div>
+                        </div>
+                        <div class="post-options">⋯</div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">${post.content}</div>
+                    </div>
+                    <div class="post-stats">
+                        <span id="likes-${post.id}">${post.likes}</span>
+                        <span>${post.comments} comments • ${post.shares} shares</span>
+                    </div>
+                    <div class="post-actions">
+                        <button class="post-action ${post.liked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                            <span>${post.liked ? '👍' : '👍'}</span>
+                            <span>Like</span>
+                        </button>
+                        <button class="post-action" onclick="toggleComments(${post.id})">
+                            <span>💬</span>
+                            <span>Comment</span>
+                        </button>
+                        <button class="post-action">
+                            <span>↗️</span>
+                            <span>Share</span>
+                        </button>
+                    </div>
+                    <div id="comments-${post.id}" class="comments-section" style="display: none;">
+                        <div class="comment">
+                            <div class="comment-pic">U</div>
+                            <div class="comment-body">
+                                <div class="comment-bubble">
+                                    <div class="comment-author">You</div>
+                                    <div class="comment-text">Great post!</div>
+                                </div>
+                                <div class="comment-meta">Just now • Like</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <div class="comment-pic">U</div>
+                            <input type="text" style="flex: 1; padding: 10px; border-radius: 20px; border: 1px solid #e5e7eb;" placeholder="Write a comment...">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render posts
+        function renderPosts() {
+            const feed = document.getElementById('postsFeed');
+            feed.innerHTML = samplePosts.map(post => createPostElement(post)).join('');
+        }
+
+        // Toggle like
+        function toggleLike(postId) {
+            const post = samplePosts.find(p => p.id === postId);
+            if (post) {
+                post.liked = !post.liked;
+                post.likes += post.liked ? 1 : -1;
+                document.getElementById(`likes-${postId}`).textContent = post.likes;
+                document.querySelector(`[data-post-id="${postId}"] .post-action`).classList.toggle('liked');
+            }
+        }
+
+        // Toggle comments visibility
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            if (commentsSection) {
+                commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        // Open post modal
+        function openPostModal() {
+            document.getElementById('postModal').classList.add('active');
+        }
+
+        // Close post modal
+        function closePostModal() {
+            document.getElementById('postModal').classList.remove('active');
+            document.getElementById('postContent').value = '';
+        }
+
+        // Create post
+        function createPost() {
+            const content = document.getElementById('postContent').value;
+            if (content.trim()) {
+                const newPost = {
+                    id: samplePosts.length + 1,
+                    author: "You",
+                    initials: "FH",
+                    time: "Just now",
+                    content: content,
+                    likes: 0,
+                    comments: 0,
+                    shares: 0,
+                    liked: false
+                };
+                samplePosts.unshift(newPost);
+                renderPosts();
+                closePostModal();
+                alert('Post created successfully!');
+            } else {
+                alert('Please write something before posting!');
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('postModal');
+            if (event.target === modal) {
+                closePostModal();
+            }
+        }
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', renderPosts);
+    </script>
+</body>
+</html>
